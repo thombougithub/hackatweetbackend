@@ -18,5 +18,8 @@ router.post('/add', (req,res)=>{
     })
   
 });
-
+router.get('/show', (req, res) => {
+    Tweet.find().then(data=>res.json({allTweets:data}))
+  });
+  
 module.exports = router
