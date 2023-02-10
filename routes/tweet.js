@@ -10,10 +10,9 @@ router.post('/add', (req,res)=>{
       return;
     }
     const date = new Date()
-    const dateToday = date.getDate()
     const newTweet = new Tweet({
         text: req.body.text,
-        date: dateToday,
+        date: date,
         user:req.body.id,
     });
     newTweet.save().then(newDoc=>{
@@ -22,7 +21,9 @@ router.post('/add', (req,res)=>{
   
 });
 router.get('/show', (req, res) => {
-    Tweet.find().then(data=>res.json({allTweets:data}))
+    Tweet.find()
+    .populate('user')
+    .then(data=>res.json({allTweets:data}))
   });
   
 module.exports = router
