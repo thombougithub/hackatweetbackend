@@ -15,8 +15,11 @@ router.post('/add', (req,res)=>{
         date: date,
         user:req.body.id,
     });
-    newTweet.save().then(newDoc=>{
-        res.json({result:true,user:newDoc.user})
+    newTweet.save()
+    .then(newDoc=>{ 
+      Tweet.findById(newDoc.id).populate('user').then(tweet => {
+        res.json({result:true,user:tweet.user, tweet})
+      })
     })
   
 });
@@ -25,5 +28,11 @@ router.get('/show', (req, res) => {
     .populate('user')
     .then(data=>res.json({allTweets:data}))
   });
+
+router.delete('/delete/:_id', (req, res)  => {
+      Tweet.deleteOne({id: req.params._id}).then( () => res.json({
+    result : 'cancelled'}) )
+})
+
   
 module.exports = router
