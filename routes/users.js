@@ -22,7 +22,7 @@ router.post('/signup',(req,res)=>{
         token:uid2(32),
       });
       newUser.save().then(newDoc=>{
-        res.json({result:true,token:newDoc.token})
+        res.json({result:true, token:newDoc.token, firstname : newDoc.firstname, username: newDoc.username, id : newDoc.id})
       });
 
     }else{
@@ -37,7 +37,7 @@ router.post('/signin',(req,res)=>{
   }
   User.findOne({username:req.body.username}).then(data=>{
     if (data && bcrypt.compareSync(req.body.password,data.password)){
-      res.json({result:true,token:data.token})
+      res.json({result:true, token:data.token, firstname : data.firstname, username: data.username, id : data.id})
     }else{
       res.json({result:false,error:'User not Found or wrong password'})
     }

@@ -9,9 +9,12 @@ router.post('/add', (req,res)=>{
       res.json({result:false,error:'Missing tweet'})
       return;
     }
+    const date = new Date()
+    const dateToday = date.getDate()
     const newTweet = new Tweet({
-        text:req.body.text,
-        user:req.body.user,
+        text: req.body.text,
+        date: dateToday,
+        user:req.body.id,
     });
     newTweet.save().then(newDoc=>{
         res.json({result:true,user:newDoc.user})
