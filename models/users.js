@@ -5,7 +5,8 @@ const usersSchema = mongoose.Schema({
     password: String,
     picture : String,
     token: String,
-    movies : [{type : mongoose.Schema.Types.ObjectId, ref : 'movies'}]
+    movies : [{type : mongoose.Schema.Types.ObjectId, ref : 'movies'}],
+    watch : [{type : mongoose.Schema.Types.ObjectId, ref : 'movies'}]
 })
 
 const User = mongoose.model('users', usersSchema)
