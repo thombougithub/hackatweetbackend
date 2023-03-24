@@ -1,10 +1,14 @@
 const mongoose = require('mongoose')
 
 const booksSchema = mongoose.Schema({
+    idBook: String,
     title : String,
+    subTitle : String,
     picture : String,
-    author: String,
-    Date : Number,
+    author: [String],
+    date : String,
+    description: String,
+    link: String,
 })
 
 const Book = mongoose.model('books', booksSchema)

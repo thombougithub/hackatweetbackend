@@ -4,15 +4,6 @@ const Movie = require('../models/movies')
 const User = require('../models/users')
 
 
-
-// Get discover movies
-router.get('/discover', (req,res) => {
-    fetch(`https://api.themoviedb.org/3/discover/movie/?api_key=${process.env.OWN_API_KEY}`)
-      .then(response => response.json())
-      .then(data => res.json({result : data}))
-})
-
-
 // Get Search movies
 
 router.post('/search', (req, res) => {

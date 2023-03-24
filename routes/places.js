@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const User = require('../models/users')
-
+const Place = require('../models/places')
 
 // Get Search books
 
@@ -15,45 +15,110 @@ router.post('/search', (req, res) => {
 })
 
 
+// add Place to dataBase
 
-// add Book to dataBase
-/*
-router.post('/addMovies', (req,res) => {
+router.post('/addPlaces', (req,res) => {
  
-    Movie.findOne({movieId : req.body.movieId}).then(data => {
+    Place.findOne({placeId : req.body.placeId}).then(data => {
        if (!data) {
-           const newMovie = new Movie({
-               title : req.body.title,
-               picture : req.body.picture,
-               type : req.body.type,
-               Date : req.body.date,
-               SerieOrMovie : req.body.sm,
-               movieId : req.body.movieId
+           const newPlace = new Place({
+            name : req.body.name, 
+            address :  req.body.address,
+            picture : req.body.picture,
+            placeId : req.body.placeId,
+            rating :  req.body.rating,
+            latitude : req.body.latitude,
+            longitude : req.body.longitude
                })
            
-               newMovie.save().then(doc => {
-                       User.updateOne({token: req.body.token}, {$push : {movies : doc.id}}).then(() => 
-                       res.json({result: true, message: 'movie saved by user'}))})
+               newPlace.save().then(doc => {
+                       User.updateOne({token: req.body.token}, {$push : {places : doc._id}}).then(() => 
+                       res.json({result: true, message: 'place saved by user'}))})
                }
                
                else {
-               Movie.findOne({movieId : req.body.movieId}).then(db => {
-                   User.findOne({token: req.body.token, movies : db._id}).then(data => {
+               Place.findOne({placeId : req.body.placeId}).then(db => {
+                   User.findOne({token: req.body.token, places : db._id}).then(data => {
                        if(data){
-                           console.log(data)
-                           User.updateOne({token: req.body.token}, {$pull : {movies : db._id}}).then(() => 
-                           res.json({result: true, message: 'movie withdraw by user'}))
+                           User.updateOne({token: req.body.token}, {$pull : {places : db._id}}).then(() => 
+                           res.json({result: true, message: 'place withdraw by user'}))
                        } else {
-                           User.updateOne({token: req.body.token}, {$push : {movies : db._id}}).then(() => 
-                           res.json({result: true, message: 'movie saved by user'}))
+                           User.updateOne({token: req.body.token}, {$push : {places : db._id}}).then(() => 
+                           res.json({result: true, message: 'place saved by user'}))
                        } 
                           })
                        })       
                }                   
            })  
-   })*/
+   })
 
 
+// add Place to visit
+
+router.post('/addPoint', (req,res) => {
+ 
+    Place.findOne({placeId : req.body.placeId}).then(data => {
+       if (!data) {
+           const newPlace = new Place({
+            name : req.body.name, 
+            address :  req.body.address,
+            picture : req.body.picture,
+            placeId : req.body.placeId,
+            rating :  req.body.rating,
+            latitude : req.body.latitude,
+            longitude : req.body.longitude
+               })
+           
+               newPlace.save().then(doc => {
+                       User.updateOne({token: req.body.token}, {$push : {point : doc._id}}).then(() => 
+                       res.json({result: true, message: 'place saved by user'}))})
+               }
+               
+               else {
+               Place.findOne({placeId : req.body.placeId}).then(db => {
+                   User.findOne({token: req.body.token, point : db._id}).then(data => {
+                       if(data){
+                           User.updateOne({token: req.body.token}, {$pull : {point : db._id}}).then(() => 
+                           res.json({result: true, message: 'place withdraw by user'}))
+                       } else {
+                           User.updateOne({token: req.body.token}, {$push : {point: db._id}}).then(() => 
+                           res.json({result: true, message: 'place saved by user'}))
+                       } 
+                          })
+                       })       
+               }                   
+           })  
+   })
+
+   // get favorite movies of a person
+
+  router.post('/placesList', (req, res) => {
+    User.findOne({token : req.body.token})
+    .populate('places')
+    .then(data => {
+        if(data){
+            res.json({result : true, data : data})
+
+        } else {
+            res.json({result : false })
+        }
+    })
+  })
+
+  // get watch list of a person
+
+  router.post('/pointsList', (req, res) => {
+    User.findOne({token : req.body.token})
+    .populate('point')
+    .then(data => {
+        if(data){
+            res.json({result : true, data : data})
+
+        } else {
+            res.json({result : false })
+        }
+    })
+  })
 
 
 module.exports = router;
