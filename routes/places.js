@@ -90,7 +90,7 @@ router.post('/addPoint', (req,res) => {
            })  
    })
 
-   // get favorite movies of a person
+   // get favorite places of a person with token
 
   router.post('/placesList', (req, res) => {
     User.findOne({token : req.body.token})
@@ -104,6 +104,22 @@ router.post('/addPoint', (req,res) => {
         }
     })
   })
+
+  // get favorite movies of a person with username
+
+  router.post('/follower', (req, res) => {
+    User.findOne({username : req.body.username})
+    .populate('places')
+    .then(data => {
+        if(data){
+            res.json({result : true, data : data})
+
+        } else {
+            res.json({result : false })
+        }
+    })
+  })
+
 
   // get watch list of a person
 

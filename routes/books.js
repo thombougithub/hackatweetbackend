@@ -91,7 +91,7 @@ router.post('/addRead', (req,res) => {
    })
 
 
-     // get favorite Books of a person
+     // get favorite Books of a person with token
    
      router.post('/booksList', (req, res) => {
        User.findOne({token : req.body.token})
@@ -105,7 +105,24 @@ router.post('/addRead', (req,res) => {
            }
        })
      })
+
+
+      // get favorite Books of a person with username
    
+      router.post('/follower', (req, res) => {
+        User.findOne({username : req.body.username})
+        .populate('books')
+        .then(data => {
+            if(data){
+                res.json({result : true, data : data})
+    
+            } else {
+                res.json({result : false })
+            }
+        })
+      })
+   
+
      // get read list of a person
    
      router.post('/readList', (req, res) => {

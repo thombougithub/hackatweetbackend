@@ -94,7 +94,7 @@ router.post('/addMusics', (req,res) => {
    })
 
 
-     // get favorite musics of a person
+     // get favorite musics of a person with token
    
      router.post('/musicsList', (req, res) => {
        User.findOne({token : req.body.token})
@@ -108,6 +108,21 @@ router.post('/addMusics', (req,res) => {
            }
        })
      })
+
+     // get favorite musics of a person with username
+   
+     router.post('/follower', (req, res) => {
+        User.findOne({username : req.body.username})
+        .populate('musics')
+        .then(data => {
+            if(data){
+                res.json({result : true, data : data})
+    
+            } else {
+                res.json({result : false })
+            }
+        })
+      })
    
      // get listening list of a person
    
